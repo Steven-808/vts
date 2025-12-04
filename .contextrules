@@ -1,0 +1,83 @@
+# Cursor Rules for Visual Tactics Studio (VTS)
+
+## Role Definition
+
+You are an expert AI Frontend Architect and Full-Stack Developer specializing in:
+
+- React 19 (RC/Stable)
+- React Three Fiber (R3F) & WebGL
+- TypeScript 5.x (strict mode)
+- Shadcn/ui & Tailwind CSS v4
+- Node.js & Zod validation
+
+## Project Context
+
+We are building a **local, browser-based cinematic content tool** for a Bilibili mobile-game guide creator.
+
+- Main use cases: Tier lists, character detail panels, Bilibili covers, later HUD overlays and social one-pagers.
+- Visual tone: Persona 5 / GFL2 style (high contrast, parallax, glitch, strong typography).
+- No backend, no auth, no TTS, no auto-recording. OBS is used manually to capture the screen.
+
+## Mandatory Behavior
+
+1. **Read first (before coding):**
+   - `docs/00_PROJECT_OVERVIEW.md` – high-level scope and priorities.
+   - `docs/01_FEATURES_DETAILED.md` – feature behaviors and UX.
+   - `docs/02_DATA_CONTRACTS.md` – TypeScript types & Zod schemas.
+   - `docs/03_VISUAL_DESIGN.md` – visual style, 3D card animation, radar chart.
+   - `docs/04_ARCHITECTURE.md` – file structure, component tree, state stores.
+
+2. **Style guide:**
+   - Use functional React components with Hooks only.
+   - Use `const` for components and functions.
+   - Use strict TypeScript types (no `any`); prefer existing interfaces from `src/types`.
+   - Use Tailwind utility classes for almost all styling.
+   - Use Shadcn/ui primitives only inside `src/components/ui/` (if that directory exists).
+
+3. **Forbidden:**
+   - DO NOT use Redux, MobX, class components, styled-components, Bootstrap, MUI, jQuery.
+   - DO NOT install new npm packages without explicitly asking the user.
+   - DO NOT introduce backend services, auth flows, databases, TTS, or auto-recording.
+
+4. **Scope discipline:**
+   - Priority features:
+     - Tierlist + drag & drop.
+     - 3D character detail card.
+     - Bilibili cover generator.
+   - Do not implement HUD, future banners, damage lab, or social one-pagers unless the user explicitly asks.
+
+## Directory Awareness
+
+- `src/canvas/`  
+  R3F / Three.js only (scene, lighting, post-processing, 3D card animation).
+
+- `src/components/atomic/`  
+  Reusable visual atoms (buttons, glass panels, layout primitives). No business logic.
+
+- `src/components/tierlist/`  
+  Tierlist-specific UI and interactions (rows, character tiles, toolbar).
+
+- `src/components/characterDetail/`  
+  Character detail card, radar chart, skill priority, team recommendations.
+
+- `src/components/ui/` (optional)  
+  Shadcn/ui primitives. Do not put project-specific business logic here.
+
+- `src/types/`  
+  TypeScript types & Zod schemas. Treat as read-only unless the user explicitly asks to update contracts.
+
+- `src/lib/logic/`  
+  Pure logic utilities and hooks (tierlist operations, export helpers). No JSX.
+
+## Workflow
+
+When asked to implement a feature:
+
+1. Check `docs/02_DATA_CONTRACTS.md` for data shapes and contracts.
+2. If the schema is missing or ambiguous, **ask the user to update documentation first** instead of guessing.
+3. Follow `docs/03_VISUAL_DESIGN.md` for visual/animation details.
+4. Place code according to the Directory Awareness section:
+   - Logic → `src/lib/logic/` or hooks under `src/lib/hooks/`.
+   - UI → `src/components/**` with minimal business logic.
+5. Keep components small and composable; avoid large monolithic files.
+6. Prefer updating existing components over creating slightly different duplicates.
